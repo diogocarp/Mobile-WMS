@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "WMS-Mobile",
+    "slug": "WMS-Mobile",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "WMS-Mobile"
+}
