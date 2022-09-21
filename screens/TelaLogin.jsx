@@ -6,13 +6,13 @@ import {
   TextInput,
   Button,
   Text,
-  Pressable,
+  Pressable
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Ionicons } from '@expo/vector-icons'
 import { styles } from '../styles/loginStyle'
 import api from "../config/conex";
-import axios from "axios";
+
 
 
 
@@ -27,7 +27,7 @@ const TelaLogin = ({ navigation }) => {
   
     
  async function login(){ 
-  const res = await api.get('api/aluno/');
+  const res = await api.get('api/aluno/1');
   console.log(res.data)
     setAluno(res.data);
    var numMat = res.data.codMatricula
@@ -90,8 +90,6 @@ const TelaLogin = ({ navigation }) => {
             placeholderTextColor="lightgray"
             secureTextEntry={hidePass}
             onChangeText={value => setPass(value)}
-
-
           />
           <TouchableOpacity style={styles.icon}
           >
@@ -108,15 +106,17 @@ const TelaLogin = ({ navigation }) => {
                     setHidePass(!hidePass)
                   }
                 }}
-
               color='black' size={25} />
           </TouchableOpacity>
         </View>
-        <Pressable style={{ textAlign: "center", marginTop: 7, marginBottom:7 }}
-        //onPress={() => {navigation.navigate('Cadastro')}}
-        >
-          <Text ><b>Esqueceu a senha?</b></Text>
+        <View style={{ flexDirection:"row", justifyContent:"space-between",alignItems:"center", display:"flex", width:'100%'}}>
+        <Pressable onPress={() => {navigation.navigate('Recuperacao')}} style={{ marginLeft:55,marginTop: 7, marginBottom:7, width:'38%' }} >
+          <Text>Esqueceu a senha?</Text>
         </Pressable>
+        <Pressable onPress={() => {navigation.navigate('Cadastro')}} style={{ marginTop: 7, marginBottom:7, width:'80%' }}>
+          <Text>- Cadastrar</Text>
+        </Pressable>
+        </View>
       </View>
       <Pressable style={styles.button} onPress={() => { 
         login()
