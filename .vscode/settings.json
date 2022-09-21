@@ -1,0 +1,5 @@
+{
+    "typescript.tsdk": "node_modules\\typescript\\lib",
+    "doki.background.enabled": false,
+    "doki.wallpaper.enabled": false
+}
