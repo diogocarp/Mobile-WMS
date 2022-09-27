@@ -34,7 +34,8 @@ const TelaLogin = ({ navigation }) => {
    var password = res.data.senha
    console.log(numMat)
      if(num == numMat){
-   navigation.navigate('WMS - Mobile')
+      navigation.navigate('WMS - Mobile')
+   
     }else{
       alert('Usuario não existe!!')
      }
@@ -119,7 +120,7 @@ const TelaLogin = ({ navigation }) => {
         </View>
       </View>
       <Pressable style={styles.button} onPress={() => { 
-        login()
+       login()
          }}
       >
         <Text style={styles.text}>Entrar</Text>

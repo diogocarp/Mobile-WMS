@@ -7,24 +7,26 @@ import { Entypo, Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { FontAwesome5, FontAwesome } from '@expo/vector-icons';
 import TelaHistorico from './screens/TelaHistorico';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { 
-    createMaterialBottomTabNavigator 
+import {
+    createMaterialBottomTabNavigator
 } from '@react-navigation/material-bottom-tabs';
 import { TelaCadastro } from './screens/TelaCadastro';
 import { TelaRecuperacao } from './screens/TelaRecuperacao';
 import { TelaQRCode } from './screens/TelaQRCode';
 import { TelaConfig } from './screens/TelaConfig';
+import { TelaEstoque } from './screens/TelaEstoque';
 
 const Stack = createNativeStackNavigator()
 export default function AppLogin() {
     return (
         <NavigationContainer>
             <Stack.Navigator >
-                <Stack.Screen name="Login" component={TelaLogin}/>
-                <Stack.Screen name="WMS - Mobile" component={MyTabs}/>
-                <Stack.Screen name="Cadastro" component={TelaCadastro}/>
-                <Stack.Screen name="Recuperacao" component={TelaRecuperacao}/>
-                
+                <Stack.Screen name="Login" component={TelaLogin} />
+                <Stack.Screen name="WMS - Mobile" component={MyTabs} />
+                <Stack.Screen name="Cadastro" component={TelaCadastro} />
+                <Stack.Screen name="Recuperacao" component={TelaRecuperacao} />
+                <Stack.Screen name="Historico" component={TelaHistorico} />
+                <Stack.Screen name="Estoque" component={TelaEstoque} />
             </Stack.Navigator>
         </NavigationContainer>
     )
@@ -40,34 +42,27 @@ export function MyTabs() {
             labeled={false}
             barStyle={{ backgroundColor: 'white' }}>
             <Tab.Screen
-            name='Inicio' 
-            component={TelaInicial}
-            
-                options={{
-                    tabBarIcon: () => {
-                        return <Entypo name='home' size={30} />
+                name='Inicio'
+                component={TelaInicial}
 
-                    }
-                    
-                    
-                }} />
-                <Tab.Screen name='Code' component={TelaQRCode}
                 options={{
                     tabBarIcon: () => {
-                        return <MaterialIcons name="qr-code-scanner" size={30} color="black" />
+                        return <Entypo name='home' size={25} />
+
                     }
 
 
                 }} />
 
-            <Tab.Screen name='Historico' component={TelaHistorico}
+            <Tab.Screen name='QRCode' component={TelaQRCode}
                 options={{
                     tabBarIcon: () => {
-                        return <FontAwesome5 name="history" size={25} color="black" />
+                        return <MaterialIcons name='qr-code-scanner' size={25} color='black' />
                     }
+                }}
 
+            />
 
-                }} />
 
             <Tab.Screen name='Perfil' component={TelaUsuario}
                 options={{
@@ -85,6 +80,7 @@ export function MyTabs() {
                 }}
 
             />
+
 
         </Tab.Navigator>
     )

@@ -1,5 +1,5 @@
-import {React, Component, useState} from "react"
-import { Text, View, StyleSheet, FlatList, Dimensions } from "react-native"
+import {React, Component} from "react"
+import { Text, View, FlatList} from "react-native"
 import api from "../config/conex";
 import Pedido from "./Pedido";
 

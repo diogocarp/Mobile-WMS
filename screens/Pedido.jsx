@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { Text, View, StyleSheet } from "react-native";
-import { Entypo } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
-import { Foundation } from "@expo/vector-icons";
+
 
 
 export default class Pedido extends Component {
@@ -46,9 +45,6 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     fontSize: 16,
     fontWeight: 500,
-  },
-  lista:{
-   
   }
   
 });
