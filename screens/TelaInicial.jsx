@@ -1,45 +1,65 @@
-import React, { useState, useEffect, useRef } from "react";
-import {Animated, View, StyleSheet, Text, Pressable } from "react-native";
-
-
+import React from "react";
+import { Animated, View, StyleSheet, Text, Pressable, StatusBar } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Fontisto } from "@expo/vector-icons";
 
-const TelaInicial = ({navigation}) => {
-  const [valor, setValor] = useState(50)
-  const counter = useRef(new Animated.Value(0)).current;
-  const countInterval = useRef(null);
-  const [count, setCount] = useState(0);
-  // EFFECT HOOK TO SETUP AND CLEAN INTERvAL COUNTER
-  useEffect(() => {
-    // SETUP INTERVAL COUNTER TO REFERENCED HOOK
-    countInterval.current = setInterval(() => setCount((prev) => prev + 10), 1000);
-    return () => {
-      // CLEAR ON EXIT
-      clearInterval(countInterval);
-    };
-  }, []);
-  // EFFECT HOOK TO TRACK CHANGES IN PROGRESS
-  useEffect(() => {
-    // TRIGGER VIEW UPDATE
-    load(valor)
-  });
-  // FUNCTION TO ANIMATE VIEW
-  const load = (value) => {
-    // UPDATE ANIMATABLE VIEW
-    Animated.timing(counter, {
-      toValue: value,
-      duration: 1000,
-      useNativeDriver: true,
-    }).start();
-  };
-  const width = counter.interpolate({
-    inputRange: [0, 100],
-    outputRange: ["0%", "100%"],
-    extrapolate: "clamp"
-  })
 
+
+
+const Progress = ({step, steps, height}) => {
+
+  const animatedValue = React.useRef(new Animated.Value(-1000)).current;
+  const reactive = React.useRef(new Animated.Value(-1000)).current;
+  const [width, setWidth] = React.useState(0);
+
+  React.useEffect(() => {Animated.timing(animatedValue, {toValue:reactive,duration:300,
+  useNativeDriver:true,
+}).start();
+},[])
+
+React.useEffect(() => {
+
+  reactive.setValue(-width + (width * step) / steps)
+
+},[step, width])
+  return(
+    <>
+    <Text style={{color:'white', fontSize:12, fontWeight:'900', marginBottom:8}}>
+    {step}/{steps}
+    </Text>
+    <View 
+    onLayout={(e) => {
+      const newWidth = e.nativeEvent.layout.width
+      setWidth(newWidth)
+    }}
+    style={{height, backgroundColor:'white',borderRadius:height,overflow:'hidden'
+    }}>
+     <Animated.View 
+     style={{height,borderRadius:height,width:'100%', position:"absolute", backgroundColor:'lightgreen',left:0,top:0,transform:[
+      {
+        translateX:animatedValue
+      }
+     ]}}/>
+    </View>
+    </>
+    )
+
+
+
+}
+
+const TelaInicial = ({navigation}) => {
+
+  const [index,setIndex] = React.useState(0)
+  React.useEffect(() => {
+    const interval = setInterval(()=>{setIndex((index + 1) % (10 + 1))
+    },1000)
+
+    return () => {
+      clearInterval(interval)
+    }
+  },[index])
   return (
     // root da tela
     <View style={{ flex: 1 }}>
@@ -129,20 +149,13 @@ const TelaInicial = ({navigation}) => {
         {/* container que recebe as duas views de baixo */}
         <View style={styles.viewBaixo}>
           {/* view-baixo-esquerda */}
-          <View style={{alignItems: "center", justifyContent: "center", width: '40%'}}>
-            <Text style={{ color: "white", fontWeight: "700", fontSize: 22 }}>
+          <View style={styles.progressBar}>
+            <Text style={{ color: "white", fontWeight: "700", fontSize: 22,marginBottom:4 }}>
               Estoque:
             </Text>
-          </View>
-
-          {/* view-baixo-direita */}
-          <View
-            style={styles.progressBar}
-          >
-            <Animated.View 
-              style={{ ...StyleSheet.absoluteFill, backgroundColor: '#46FF33' ,marginRight: 10}}
-            />
-          </View>
+            <StatusBar hidden/>
+            <Progress step={index} steps={10} height={20}/>
+          </View>  
         </View>
       </View>
     </View>
@@ -170,15 +183,11 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   progressBar: {
-  width: '50%',
-   height: 40,
-   backgroundColor: '#fff',
-   borderWidth: 3,
-   borderRadius: 30,
-   marginLeft: 3,
-   borderColor: '#555',
-   flexDirection:"row",
-   overflow: "hidden"
+    flex:1,
+    justifyContent:'center',
+    padding:20,
+    color:'white'
+
   },
 });
 
