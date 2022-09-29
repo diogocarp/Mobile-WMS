@@ -25,19 +25,20 @@ export const TelaQRCode = () => {
 
 
   if (permission === null){
-    return <Text>Requerendo permissão de camêra</Text>
+    return <Text style={styles.text}>Requerendo permissão de câmera</Text>
 
 
   }
   if(permission === false){
-    return <Text> Sem acesso a camêra</Text>
+    return <Text style={styles.text}> Sem acesso a câmera</Text>
   }
 
   return(
   <View style={styles.container}>
     <BarCodeScanner onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
     style = {StyleSheet.absoluteFillObject}/>
-    {scanned && <Button title="Aperte para escanear novamente" onPress={() => setScanned(false)}/>}
+                        
+    {scanned && <Button color='black'  title="Aperte para escanear novamente" onPress={() => setScanned(false)}/>}
     
   </View>
   )
@@ -52,5 +53,14 @@ const styles = StyleSheet.create({
     justifyContent:'center'
 
 
+  },
+
+  text:{
+    textAlign:"center",
+    marginTop:'50%',
+    fontSize:20
+
+
   }
+
 })

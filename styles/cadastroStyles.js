@@ -20,15 +20,13 @@ export const styles = StyleSheet.create({
     },
   
     button: {
-      position: "relative",
-      alignItems: "center",
-      justifyContent: "center",
+      
       paddingHorizontal: 32,
       paddingVertical: 12,
       borderRadius: 30,
       elevation: 3,
       backgroundColor: "black",
-      top: 20,
+     
     },
   
     text: {
@@ -41,11 +39,11 @@ export const styles = StyleSheet.create({
     },
     icon:{
   
-      width:"100%",
+      width:"15%",
       height:50,
       justifyContent:'center',
       alignItems:'center',
-      left:"50%"
+      
   
     }
   });

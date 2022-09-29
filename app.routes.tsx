@@ -14,7 +14,9 @@ import { TelaCadastro } from './screens/TelaCadastro';
 import { TelaRecuperacao } from './screens/TelaRecuperacao';
 import { TelaQRCode } from './screens/TelaQRCode';
 import { TelaConfig } from './screens/TelaConfig';
-import { TelaEstoque } from './screens/TelaEstoque';
+import TelaEstoque from './screens/TelaEstoque';
+import TelaProduto from './screens/TelaProduto';
+
 
 const Stack = createNativeStackNavigator()
 export default function AppLogin() {
@@ -27,6 +29,7 @@ export default function AppLogin() {
                 <Stack.Screen name="Recuperacao" component={TelaRecuperacao} />
                 <Stack.Screen name="Historico" component={TelaHistorico} />
                 <Stack.Screen name="Estoque" component={TelaEstoque} />
+                <Stack.Screen name="Produto" component={TelaProduto} />
             </Stack.Navigator>
         </NavigationContainer>
     )
@@ -38,6 +41,7 @@ export function MyTabs() {
     return (
 
         <Tab.Navigator
+            
             shifting={true}
             labeled={false}
             barStyle={{ backgroundColor: 'white' }}>

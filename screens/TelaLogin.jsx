@@ -27,17 +27,19 @@ const TelaLogin = ({ navigation }) => {
   
     
  async function login(){ 
-  const res = await api.get('api/aluno/1');
-  console.log(res.data)
+  const res = await api.get(`api/aluno/17`);
+  
     setAluno(res.data);
+    console.log(res.data)
    var numMat = res.data.codMatricula
    var password = res.data.senha
    console.log(numMat)
      if(num == numMat){
       navigation.navigate('WMS - Mobile')
    
-    }else{
-      alert('Usuario não existe!!')
+    }else {
+      alert('Usuario não existe');
+      
      }
 
  }

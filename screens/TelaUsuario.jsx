@@ -4,7 +4,7 @@ import api from "../config/conex";
 
 
 
-const TelaUsuario = () => {
+const TelaUsuario = ({}) => {
 
     const [user, setUser] = useState()
 
