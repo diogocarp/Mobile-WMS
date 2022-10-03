@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Animated, View, StyleSheet, Text, Pressable, StatusBar } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, Fontisto } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Fontisto } from "@expo/vector-icons";
+import moment from 'moment'
+import 'moment/locale/pt-br'
+import OneSignal from 'react-native-onesignal'
+
 
 
 
@@ -60,6 +63,13 @@ const TelaInicial = ({navigation}) => {
       clearInterval(interval)
     }
   },[index])
+
+  useEffect(() => {
+    OneSignal.init('024a4a88-37af-4983-8130-69070a7afeda');
+
+  }, []);
+
+
   return (
     // root da tela
     <View style={{ flex: 1 }}>
@@ -95,9 +105,7 @@ const TelaInicial = ({navigation}) => {
               flexDirection: "column",
             }}
           >
-            <Text style={{ color: "white", fontSize: 26 }}>DOMINGO</Text>
-
-            <Text style={{ color: "white", fontSize: 26 }}>19/10/2022</Text>
+          <Text style={{ color: "white", fontSize: 20, marginRight:10 }}>{moment(new Date()).locale('pt-br').format('LLLL')}</Text>
           </View>
         </View>
         {/* fim da view data */}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import TelaInicial from './screens/TelaInicial';
 import TelaLogin from './screens/TelaLogin';
 import { NavigationContainer } from '@react-navigation/native';
@@ -18,8 +18,11 @@ import TelaEstoque from './screens/TelaEstoque';
 import TelaProduto from './screens/TelaProduto';
 
 
+
 const Stack = createNativeStackNavigator()
 export default function AppLogin() {
+    
+    
     return (
         <NavigationContainer>
             <Stack.Navigator >

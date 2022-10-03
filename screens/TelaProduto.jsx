@@ -1,5 +1,5 @@
-import { React, Component, useState, useEffect } from "react";
-import { Text, View, StyleSheet, Pressable, Image } from "react-native";
+import { React, useState, useEffect } from "react";
+import { Text, View, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import api from "../config/conex";
 
@@ -7,7 +7,6 @@ import { Entypo } from "@expo/vector-icons";
 
 const TelaProduto = ({ route }) => {
   const [produto, setProduto] = useState();
-  const navigation = useNavigation();
   const id = route.params?.id;
   console.log(id);
 
