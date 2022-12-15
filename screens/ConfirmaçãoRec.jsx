@@ -1,25 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, TextInput, Pressable, Text } from "react-native";
 import api from "../config/conex";
-import Spinner from 'react-native-loading-spinner-overlay';
 
-export function TelaRecuperacao({ navigation }) {
-  const [email, setEmail] = useState("");
-  const [spinner, setSpinner] = useState(false);
+export function Confirmação({ navigation, route }) {
+    const email = route.params?.alunoEmail
+    
+    const [code, setCode] = useState("")
+    const [aluno, setAluno] = useState("")
+    
+    useEffect(() => {
+        api
+          .get(`api/aluno/buscarEmailAluno/${email}`)
+          .then((response) => setAluno(response.data))
+          .catch((err) => {
+            console.error("Erro: " + err);
+          });
+      }, []);
 
-  const time = () => setInterval(() => {setSpinner(false)},5000)
-  
-  const user = {
-    email: email
-  }
+    const codigo = aluno.codigo
 
-   function sendEmail() {
-      api.post(`api/aluno/buscarEmail/${email}`, user)
-    .then((response) => {
-      response == 500 ? alert("Email não está cadastrado") : navigation.navigate('Confirmação Recuperação', 
-    { alunoEmail: email }
-    )})
-
+    function comfirmacao() {
+        if(code == codigo){
+            recuperar()
+        } else {
+            alert("Codigo Incorreto!")
+        }
+        
+    }
+    function recuperar() {
+    if ( api.put(`api/aluno/recuperarSenha/${aluno.id}`)
+    .then()){
+        navigation.navigate('Cadastro', {id: aluno.id})
+    }
+     else {
+      alert("Email não cadastrado");
+    }
   }
 
   return (
@@ -34,19 +49,16 @@ export function TelaRecuperacao({ navigation }) {
           color: "white",
         }}
       >
-        Recuperação (1/2)
+        Recuperação (2/2)
       </Text>
       <TextInput
         style={styles.input}
-        placeholder="Insira seu e-mail para recuperação"
+        placeholder="Insira o código enviado para seu email"
         placeholderTextColor="lightgray"
-        onChangeText={(value) => setEmail(value)}
+        onChangeText={(value) => setCode(value)}
       />
-      <Spinner
-      visible={spinner}
-      textStyle={styles.spinnerTextStyle}
-    />
-      <Pressable style={styles.button} onPress={() => {sendEmail(),setSpinner(true), time()}}>
+      <Pressable style={styles.button} onPress={() => comfirmacao()} 
+        >
         <Text style={styles.text}>Enviar</Text>
       </Pressable>
     </View>
@@ -90,8 +102,5 @@ const styles = StyleSheet.create({
     elevation: 3,
     backgroundColor: "black",
     top: 20,
-  },
-  spinnerTextStyle: {
-    color: '#000'
   },
 });

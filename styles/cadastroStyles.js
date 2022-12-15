@@ -26,6 +26,8 @@ export const styles = StyleSheet.create({
       borderRadius: 30,
       elevation: 3,
       backgroundColor: "black",
+      top:580,
+      position:"absolute"
      
     },
   

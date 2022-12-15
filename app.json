@@ -2,10 +2,20 @@
   "expo": {
     "name": "WMS-Mobile",
     "slug": "WMS-Mobile",
-    "version": "1.0.0",
+    "version": "1.0.2",
+    "platforms": ["ios", "android", "web"], 
+    "orientation": "portrait",
+    "icon": "./assets/5.png",
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "android": {
+      "package": "com.diogo_carpinelli.WMSMobile",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/5.png",
+        "backgroundColor": "#FFFFFF"
+        }
+    }
   },
   "name": "WMS-Mobile"
 }

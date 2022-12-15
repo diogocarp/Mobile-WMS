@@ -1,18 +1,14 @@
 import { React, useState, useEffect } from "react";
-import { Text, View, StyleSheet } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import api from "../config/conex";
-
-import { Entypo } from "@expo/vector-icons";
+import { Text, View, StyleSheet, Image } from "react-native";
+import api from "../../config/conex";
 
 const TelaProduto = ({ route }) => {
   const [produto, setProduto] = useState();
   const id = route.params?.id;
-  console.log(id);
 
   useEffect(() => {
     api
-      .get("api/produto/" + id)
+      .get(`api/produto/${id}`)
       .then((response) => setProduto(response.data))
       .catch((err) => {
         console.error("Erro: " + err);
@@ -28,7 +24,6 @@ const TelaProduto = ({ route }) => {
         alignItems: "center",
       }}
     >
-      {/* container com info do produto */}
       <View
         style={{
           height: "80%",
@@ -38,7 +33,6 @@ const TelaProduto = ({ route }) => {
           borderRadius: 30,
         }}
       >
-        {/* view de cima do container */}
         <View
           style={{
             height: "40%",
@@ -47,54 +41,34 @@ const TelaProduto = ({ route }) => {
             justifyContent: "center",
           }}
         >
-          <Entypo name="box" size={150} color="black" />
+          <Image
+            source={
+              produto?.imagem == null
+                ? require("../../assets/open-box.png")
+                : {
+                    uri:produto?.imagem
+                      
+                  }
+            }
+            style={{ width: 130, height: 130, borderRadius: 15 }}
+          />
           <Text style={{ marginTop: 10, fontSize: 18, fontWeight: "600" }}>
             {produto?.nome}
           </Text>
           <Text style={styles.infoText}>Descrição: {produto?.descricao}</Text>
         </View>
 
-        {/* view de baixo do container */}
         <View style={{ height: "60%", alignItems: "center", marginTop: 10 }}>
-          {/* row's da view de baixo */}
-          {/* row 1 do container */}
           <View style={styles.infoRow}>
-            {/* lado esq do container */}
-            <View style={styles.infoTextContainer}>
-              <Text style={styles.infoText}>SKU: {produto?.sku}</Text>
-            </View>
-
-            {/* lado dir do container */}
-            <View style={styles.infoTextContainer}>
-              <Text style={styles.infoText}>
-                Valor un.: {produto?.valorUnitario}
-              </Text>
-            </View>
+            <Text style={styles.infoText}>SKU: {produto?.sku}</Text>
           </View>
 
-          {/* row 2 do container */}
-          <View style={styles.infoRow}>
-
-            {/* lado esq do container */}
-            <View style={styles.infoTextContainer}>
-              <Text style={styles.infoText}>
-                Quantidade: {produto?.quantidade}
-              </Text>
-            </View>
-
-            {/* lado dir do container */}
-            <View style={styles.infoTextContainer}>
-            <Text style={styles.infoText}>
-              Importado: {produto?.importado ? "Sim" : "Não"}
-            </Text>
-            </View>
-          </View>
-
-          {/* row 3 do container */}
-          <View style={styles.infoRow}>
-            
-          </View>
+          <Text style={styles.infoText}>
+            Valor un.: R${produto?.valorUnitario}
+          </Text>
         </View>
+
+        <View style={styles.infoRow}></View>
       </View>
     </View>
   );
@@ -108,11 +82,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-   infoRow: {
+  infoRow: {
     width: "90%",
     flexDirection: "row",
     justifyContent: "space-evenly",
-    marginTop: 15,
   },
   infoTextContainer: {
     width: "45%",
@@ -122,7 +95,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "500",
   },
- 
 });
 
 export default TelaProduto;

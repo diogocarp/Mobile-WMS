@@ -1,111 +1,70 @@
-import React, { useEffect } from "react";
-import { Animated, View, StyleSheet, Text, Pressable, StatusBar } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Pressable,
+} from "react-native";
 import { Ionicons, Fontisto } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import moment from 'moment'
-import 'moment/locale/pt-br'
-import OneSignal from 'react-native-onesignal'
+import moment from "moment";
+import "moment/locale/pt-br";
+import api from "../config/conex";
 
-
-
-
-
-const Progress = ({step, steps, height}) => {
-
-  const animatedValue = React.useRef(new Animated.Value(-1000)).current;
-  const reactive = React.useRef(new Animated.Value(-1000)).current;
-  const [width, setWidth] = React.useState(0);
-
-  React.useEffect(() => {Animated.timing(animatedValue, {toValue:reactive,duration:300,
-  useNativeDriver:true,
-}).start();
-},[])
-
-React.useEffect(() => {
-
-  reactive.setValue(-width + (width * step) / steps)
-
-},[step, width])
-  return(
-    <>
-    <Text style={{color:'white', fontSize:12, fontWeight:'900', marginBottom:8}}>
-    {step}/{steps}
-    </Text>
-    <View 
-    onLayout={(e) => {
-      const newWidth = e.nativeEvent.layout.width
-      setWidth(newWidth)
-    }}
-    style={{height, backgroundColor:'white',borderRadius:height,overflow:'hidden'
-    }}>
-     <Animated.View 
-     style={{height,borderRadius:height,width:'100%', position:"absolute", backgroundColor:'lightgreen',left:0,top:0,transform:[
-      {
-        translateX:animatedValue
-      }
-     ]}}/>
-    </View>
-    </>
-    )
-
-
-
-}
-
-const TelaInicial = ({navigation}) => {
-
-  const [index,setIndex] = React.useState(0)
-  React.useEffect(() => {
-    const interval = setInterval(()=>{setIndex((index + 1) % (10 + 1))
-    },1000)
-
-    return () => {
-      clearInterval(interval)
-    }
-  },[index])
+const TelaInicial = ({ navigation, route }) => {
+  console.log(route);
+  const num = route.params?.userCod;
+  const [user, setUser] = useState("");
+  const [produto, setProduto] = useState([]);
 
   useEffect(() => {
-    OneSignal.init('024a4a88-37af-4983-8130-69070a7afeda');
-
+    api
+      .get("api/aluno/cod/"+num)
+      .then((response) => setUser(response.data))
+      .catch((err) => {
+        console.error("erro" + err);
+      });
+    api
+      .get("api/produto/list")
+      .then((response) => setProduto(response.data))
+      .catch((err) => {
+        console.error("erro" + err);
+      });
   }, []);
 
+  const result = produto.length
 
   return (
     // root da tela
     <View style={{ flex: 1 }}>
       {/* container */}
-      <View
-        style={{
-          backgroundColor: "#82BFF5",
-          height: "100%",
-          width: "100%",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
+      <View style={styles.container}>
+        {/* view de saudação */}
+        <View style={styles.greeting}>
+          <Text
+            style={{
+              fontSize: 20,
+              fontStyle: "normal",
+              fontWeight: "700",
+              color: "white",
+            }}
+          >
+            Bem-vindo, {user?.nome}!
+          </Text>
+        </View>
+
         {/* View da data */}
         <View style={styles.viewData}>
           {/* view do icon */}
-          <View
-            style={{
-              width: "40%",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+          <View style={styles.viewDataIconContainer}>
             <Ionicons name="ios-calendar-outline" size={85} color="white" />
           </View>
 
           {/* data */}
-          <View
-            style={{
-              width: "60%",
-              alignItems: "center",
-              justifyContent: "center",
-              flexDirection: "column",
-            }}
-          >
-          <Text style={{ color: "white", fontSize: 20, marginRight:10 }}>{moment(new Date()).locale('pt-br').format('LLLL')}</Text>
+          <View style={styles.data}>
+            <Text style={{ color: "white", fontSize: 20, marginRight: 10 }}>
+              {moment(new Date()).locale("pt-br").format("LLLL")}
+            </Text>
           </View>
         </View>
         {/* fim da view data */}
@@ -129,7 +88,10 @@ const TelaInicial = ({navigation}) => {
               borderRadius: 25,
               alignItems: "center",
               justifyContent: "center",
-            }} onPress={() => {navigation.navigate('Historico')}}
+            }}
+            onPress={() => {
+              navigation.navigate("Histórico", { userId: user.id });
+            }}
           >
             <MaterialCommunityIcons
               name="clipboard-list"
@@ -147,7 +109,10 @@ const TelaInicial = ({navigation}) => {
               borderRadius: 25,
               alignItems: "center",
               justifyContent: "center",
-            }} onPress={() => {navigation.navigate('Estoque')}}
+            }}
+            onPress={() => {
+              navigation.navigate("Estoque");
+            }}
           >
             <Fontisto name="database" size={80} color="white" />
           </Pressable>
@@ -158,12 +123,18 @@ const TelaInicial = ({navigation}) => {
         <View style={styles.viewBaixo}>
           {/* view-baixo-esquerda */}
           <View style={styles.progressBar}>
-            <Text style={{ color: "white", fontWeight: "700", fontSize: 22,marginBottom:4 }}>
-              Estoque:
+            <Text
+              style={{
+                color: "white",
+                fontWeight: "700",
+                fontSize: 26,
+                marginBottom: 4,
+                textAlign: "center",
+              }}
+            >
+              Estoque: {result}
             </Text>
-            <StatusBar hidden/>
-            <Progress step={index} steps={10} height={20}/>
-          </View>  
+          </View>
         </View>
       </View>
     </View>
@@ -171,14 +142,44 @@ const TelaInicial = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#82BFF5",
+    height: "100%",
+    width: "100%",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  greeting: {
+    width: "100%",
+    marginTop: "5%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   viewData: {
     height: "18%",
     backgroundColor: "#506266",
     width: "80%",
-    marginTop: 50,
+    marginTop: "5%",
     borderRadius: 20,
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  viewDataIconContainer: {
+    width: "40%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  data: {
+    width: "60%",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "column",
+  },
+  viewMeio: {
+    width: "60%",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "column",
   },
   viewBaixo: {
     height: "18%",
@@ -188,14 +189,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     flexDirection: "row",
     justifyContent: "space-around",
-    alignItems: "center"
+    alignItems: "center",
   },
   progressBar: {
-    flex:1,
-    justifyContent:'center',
-    padding:20,
-    color:'white'
-
+    flex: 1,
+    justifyContent: "center",
+    padding: 20,
+    color: "white",
   },
 });
 

@@ -1,16 +1,18 @@
 import { React, useState, useEffect } from "react";
 import { Text, View, StyleSheet, Pressable } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import api from "../config/conex";
+import api from "../../config/conex";
+import Spinner from 'react-native-loading-spinner-overlay';
 
-
-const TelaEstoque = ({navigation}) => {
+const TelaEstoque = ({ navigation }) => {
   const [produto, setProduto] = useState([]);
-  const [id, setId] = useState(0)
+  const [spinner, setSpinner] = useState(true);
+  
 
   useEffect(() => {
+    setInterval(() => {setSpinner(false)},3000)
     api
-      .get("api/produto/")
+      .get("api/produto/list")
       .then((response) => setProduto(response.data))
       .catch((err) => {
         console.error("erro" + err);
@@ -19,6 +21,10 @@ const TelaEstoque = ({navigation}) => {
 
   return (
     <ScrollView style={{ backgroundColor: "#82BFF5" }}>
+      <Spinner
+      visible={spinner}
+      textStyle={styles.spinnerTextStyle}
+    />
       <View
         style={{
           backgroundColor: "#82BFF5",
@@ -36,12 +42,19 @@ const TelaEstoque = ({navigation}) => {
         >
           {console.log(produto)}
           {produto.map((p) => (
-            <Pressable key={p.codProduto} style={styles.itemLista} onPress={() => navigation.navigate('Produto', {id: p.codProduto})}>
-              <View style={{ width: '70%', flexDirection: "column"}}>
+            <Pressable
+              key={p.codProduto}
+              style={styles.itemLista}
+              onPress={() =>
+                navigation.navigate("Produto", { id: p.codProduto })
+              }
+            >
+              <View style={{ width: "70%", flexDirection: "column" }}>
                 <Text style={styles.text}>Código: {p.codProduto}</Text>
                 <Text style={styles.text}>Produto: {p.nome}</Text>
-                <Text style={styles.text}>Quantidade: {p.quantidade}</Text>
-                
+                <Text style={styles.text}>
+                  Importado: {produto?.importado ? "Sim" : "Não"}
+                </Text>
               </View>
             </Pressable>
           ))}
@@ -67,9 +80,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginLeft: 20,
     fontSize: 16,
-    fontWeight: '500'
+    fontWeight: "500",
   },
   lista: {},
 });
 
-export default TelaEstoque
+export default TelaEstoque;
